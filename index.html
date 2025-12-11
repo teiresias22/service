@@ -21,7 +21,7 @@
       iframe.src = deeplink;
       document.body.appendChild(iframe);
 
-      var fallbackDelay = 1500; // 1.5초 후에도 페이지가 보이면 스토어로
+      var fallbackDelay = 2500; // 1.5초 후에도 페이지가 보이면 스토어로
 
       var timer = setTimeout(function () {
         var isHidden = document.hidden || document.webkitHidden;
