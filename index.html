@@ -9,19 +9,16 @@
     window.onload = function () {
       var deeplink = "tesla://service_schedule_home/0";
 
-      // OS에 따른 스토어 링크
-      var playStore = "https://play.google.com/store/apps/details?id=com.tesla.app";
-      var appStore  = "https://apps.apple.com/kr/app/tesla/id582007913"; // 실제 ID로 변경 필요
+      var playStore = "https://play.google.com/store/apps/details?id=com.teslamotors.tesla";
+      var appStore  = "https://apps.apple.com/app/id582007913";
 
       var isAndroid = /Android/i.test(navigator.userAgent);
       var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       var start = Date.now();
 
-      // 앱 열기 시도
       window.location.href = deeplink;
 
-      // 앱이 없는 경우 → fallback
       setTimeout(function () {
         var elapsed = Date.now() - start;
 
@@ -31,7 +28,6 @@
           } else if (isIOS) {
             window.location.href = appStore;
           } else {
-            // 기타 플랫폼은 웹으로 이동
             window.location.href = "https://www.tesla.com/app";
           }
         }
