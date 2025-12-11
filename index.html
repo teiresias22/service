@@ -4,34 +4,46 @@
   <meta charset="utf-8" />
   <title>Tesla – Service Schedule</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <script>
     window.onload = function () {
       var deeplink = "tesla://service_schedule_home/0";
 
       var playStore = "https://play.google.com/store/apps/details?id=com.teslamotors.tesla";
       var appStore  = "https://apps.apple.com/app/id582007913";
+      var webFallback = "https://www.tesla.com/app";
 
       var isAndroid = /Android/i.test(navigator.userAgent);
       var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-      var start = Date.now();
+      // 딥링크 시도
+      var iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = deeplink;
+      document.body.appendChild(iframe);
 
-      window.location.href = deeplink;
+      var fallbackDelay = 1500; // 1.5초 후에도 페이지가 보이면 스토어로
 
-      setTimeout(function () {
-        var elapsed = Date.now() - start;
+      var timer = setTimeout(function () {
+        var isHidden = document.hidden || document.webkitHidden;
 
-        if (elapsed < 2000) {
+        // 앱이 열리지 않아 페이지가 그대로 보이는 경우에만 스토어로 이동
+        if (!isHidden) {
           if (isAndroid) {
             window.location.href = playStore;
           } else if (isIOS) {
             window.location.href = appStore;
           } else {
-            window.location.href = "https://www.tesla.com/app";
+            window.location.href = webFallback;
           }
         }
-      }, 800);
+      }, fallbackDelay);
+
+      // 앱이 열리면 보통 페이지가 background 로 가면서 hidden 이 됨
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden || document.webkitHidden) {
+          clearTimeout(timer); // 앱이 열린 것으로 보고 스토어 이동 취소
+        }
+      });
     };
   </script>
 </head>
